@@ -1,0 +1,65 @@
+void setup() {
+  size(640, 360, P3D);
+  noStroke();
+  fill(204);
+}
+
+void draw() {
+  background(0);
+
+  // 塗りつぶしの色が白
+  fill(255);
+  float distanceBetweenCircles = 180;  // Changed from 200 to 220
+  float centerX1 = width/2 - distanceBetweenCircles/2;
+  float centerY1 = height/2;
+  float centerX2 = width/2 + distanceBetweenCircles/2;
+  float centerY2 = height/2;
+  float radius = 200;
+  ellipse(centerX1, centerY1, radius, radius);
+  ellipse(centerX2, centerY2, radius, radius);
+
+  // Black circle (inside the white one)
+  fill(0);
+  float targetX1 = mouseX - distanceBetweenCircles/2;  // Get and adjust the X coordinate of the mouse
+  float targetY1 = mouseY;        // Get the Y coordinate of the mouse
+  float targetX2 = mouseX + distanceBetweenCircles/2;  // Get and adjust the X coordinate of the mouse
+  float targetY2 = mouseY;        // Get the Y coordinate of the mouse
+  float blackRadius = 50;        // Radius of the black circle
+  float angle1, angle2;                   // Declare angle variable here
+  
+  // Check if the black circle is inside the white one
+  if (dist(targetX1, targetY1, centerX1, centerY1) > radius/2 - blackRadius/2) {
+    // If it's outside, keep it on the edge of the white circle
+    angle1 = atan2(targetY1 - centerY1, targetX1 - centerX1);
+    targetX1 = centerX1 + cos(angle1) * (radius/2 - blackRadius/2);
+    targetY1 = centerY1 + sin(angle1) * (radius/2 - blackRadius/2);
+  }
+  
+  // Calculate the angle towards the mouse cursor
+  angle1 = atan2(mouseY - centerY1, mouseX - centerX1);
+  
+  // Draw the black circle facing the mouse cursor
+  pushMatrix();
+  translate(targetX1, targetY1);
+  rotate(angle1);
+  ellipse(0, 0, blackRadius, blackRadius);
+  popMatrix();
+  
+  // Check if the black circle is inside the white one
+  if (dist(targetX2, targetY2, centerX2, centerY2) > radius/2 - blackRadius/2) {
+    // If it's outside, keep it on the edge of the white circle
+    angle2 = atan2(targetY2 - centerY2, targetX2 - centerX2);
+    targetX2 = centerX2 + cos(angle2) * (radius/2 - blackRadius/2);
+    targetY2 = centerY2 + sin(angle2) * (radius/2 - blackRadius/2);
+  }
+  
+  // Calculate the angle towards the mouse cursor
+  angle2 = atan2(mouseY - centerY2, mouseX - centerX2);
+  
+  // Draw the black circle facing the mouse cursor
+  pushMatrix();
+  translate(targetX2, targetY2);
+  rotate(angle2);
+  ellipse(0, 0, blackRadius, blackRadius);
+  popMatrix();
+}
